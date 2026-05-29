@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # Example 1: HttpWebhookAdapter
+  flashlogin-webhook:
+    image: wa-flashlogin/server:0.1.0
+    ports:
+      - "3060:3060"
+    environment:
+      PORT: 3060
+      FLASHLOGIN_SECRET: ${FLASHLOGIN_SECRET}
+      FLASHLOGIN_ADAPTER: webhook
+      FLASHLOGIN_WEBHOOK_SECRET: ${WEBHOOK_SECRET}
+      FLASHLOGIN_BOT_JID: ${BOT_JID}
+      FLASHLOGIN_TTL_MS: 300000
+      FLASHLOGIN_TOKEN_LENGTH: 8
+      FLASHLOGIN_MESSAGE_TEMPLATE: "Login {token}"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3060/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Example 2: MetaCloudAdapter
+  flashlogin-meta:
+    image: wa-flashlogin/server:0.1.0
+    ports:
+      - "3061:3060"
+    environment:
+      PORT: 3060
+      FLASHLOGIN_SECRET: ${FLASHLOGIN_SECRET}
+      FLASHLOGIN_ADAPTER: meta-cloud
+      FLASHLOGIN_META_VERIFY_TOKEN: ${META_VERIFY_TOKEN}
+      FLASHLOGIN_META_APP_SECRET: ${META_APP_SECRET}
+      FLASHLOGIN_BOT_JID: ${BOT_PHONE_NUMBER}
+      FLASHLOGIN_TTL_MS: 300000
+      FLASHLOGIN_TOKEN_LENGTH: 8
+      FLASHLOGIN_MESSAGE_TEMPLATE: "Login {token}"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3060/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
