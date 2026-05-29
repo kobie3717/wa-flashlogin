@@ -54,15 +54,41 @@ export class HttpWebhookAdapter implements WAAdapter {
         return;
       }
 
-      // Whatshub webhook payload shape (event: 'message.text'):
-      // { event, sessionUserId, from, fromJid, text, body, type, timestamp }
-      // Normalize: from = sender phone (strip @s.whatsapp.net suffix if present)
-      const rawFrom = (req.body.from || req.body.fromJid || '').toString();
-      const from = rawFrom.replace(/@.*$/, ''); // Strip @s.whatsapp.net
-      const text = (req.body.text || req.body.body || '').toString();
+      // Whatshub webhook payload shape:
+      //   { event, timestamp, data: { from, phone, fromName, chatJid, text, ... } }
+      // Or simpler test payload: { from, text }
+      // Prefer `data.phone` (E.164 digits, no '+'), fall back to JID stripping.
+      const data = (req.body && req.body.data) ? req.body.data : req.body;
+      const phone = (data?.phone || '').toString();
+      const rawFrom = (data?.from || data?.fromJid || '').toString();
 
-      if (from && text && this.handler) {
-        this.handler({ from, text });
+      let normalizedFrom = '';
+      if (phone) {
+        // whatshub's phone is digits-only (e.g. "27825651069"); add E.164 '+'
+        normalizedFrom = phone.startsWith('+') ? phone : `+${phone}`;
+      } else if (rawFrom.endsWith('@s.whatsapp.net')) {
+        // Phone JID: strip suffix → digits → prefix '+'
+        const digits = rawFrom.replace('@s.whatsapp.net', '');
+        normalizedFrom = digits.startsWith('+') ? digits : `+${digits}`;
+      } else if (rawFrom.endsWith('@lid')) {
+        // LID with no resolved phone — pass through raw so caller can decide;
+        // session.phone matching will likely fail until LID→phone map is wired.
+        normalizedFrom = rawFrom;
+      } else {
+        // Plain phone string or unknown JID — strip any JID suffix,
+        // prepend '+' if it looks like a phone (digits-only).
+        const stripped = rawFrom.replace(/@.*$/, '');
+        if (/^\d+$/.test(stripped)) {
+          normalizedFrom = `+${stripped}`;
+        } else {
+          normalizedFrom = stripped;
+        }
+      }
+
+      const text = (data?.text || data?.body || '').toString();
+
+      if (normalizedFrom && text && this.handler) {
+        this.handler({ from: normalizedFrom, text });
       }
 
       res.status(200).json({ ok: true });

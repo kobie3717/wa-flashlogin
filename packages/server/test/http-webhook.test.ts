@@ -78,7 +78,7 @@ describe('HttpWebhookAdapter', () => {
     }
 
     expect(handler).toHaveBeenCalledWith({
-      from: '27825651069',
+      from: '+27825651069',
       text: 'Login ABCD1234',
     });
     expect(res.status).toHaveBeenCalledWith(200);
@@ -138,7 +138,7 @@ describe('HttpWebhookAdapter', () => {
     }
 
     expect(handler).toHaveBeenCalledWith({
-      from: '27825651069',
+      from: '+27825651069',
       text: 'Login ABCD1234',
     });
   });
@@ -227,7 +227,7 @@ describe('HttpWebhookAdapter', () => {
     }
 
     expect(handler).toHaveBeenCalledWith({
-      from: '27825651069',
+      from: '+27825651069',
       text: 'Login ABCD1234',
     });
     expect(res.status).toHaveBeenCalledWith(200);
