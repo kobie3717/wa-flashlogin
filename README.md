@@ -168,6 +168,8 @@ Response:
 
 ### BaileysAdapter
 
+For direct Baileys integration (self-hosted WhatsApp session):
+
 ```typescript
 import { BaileysAdapter } from 'wa-flashlogin-server';
 
@@ -176,6 +178,33 @@ const adapter = new BaileysAdapter({
   botJid: '27825651069@s.whatsapp.net'
 });
 ```
+
+### HttpWebhookAdapter
+
+For webhook-based message routing (e.g., from WhatsHub, Twilio, MessageBird):
+
+```typescript
+import { HttpWebhookAdapter } from 'wa-flashlogin-server';
+
+const adapter = new HttpWebhookAdapter({
+  secret: process.env.FLASH_WEBHOOK_SECRET,  // For HMAC verification
+  botJid: '27825651069@s.whatsapp.net'       // Your bot number
+});
+
+// Mount webhook receiver
+app.use('/flash/webhook', adapter.router());
+
+// Configure your webhook provider to POST to /flash/webhook:
+// - Authorization: Bearer <secret> OR
+// - X-WhatsHub-Signature: sha256=<hmac>
+// - Body: { from: "27825651069@s.whatsapp.net", text: "Login ABCD1234" }
+```
+
+The adapter normalizes incoming webhook payloads to the standard `{ from, text }` shape:
+- Strips `@s.whatsapp.net` suffix from JIDs
+- Accepts both `from` and `fromJid` fields
+- Accepts both `text` and `body` fields
+- Verifies authenticity via HMAC signature OR Bearer token
 
 ### Custom Adapter
 
