@@ -206,6 +206,25 @@ The adapter normalizes incoming webhook payloads to the standard `{ from, text }
 - Accepts both `text` and `body` fields
 - Verifies authenticity via HMAC signature OR Bearer token
 
+### MetaCloudAdapter
+
+For Meta's official WhatsApp Business Cloud API (no Baileys, lower ban risk):
+
+```typescript
+import { MetaCloudAdapter } from 'wa-flashlogin-server';
+
+const adapter = new MetaCloudAdapter({
+  verifyToken: process.env.META_VERIFY_TOKEN,    // for hub.verify_token check
+  appSecret: process.env.META_APP_SECRET,        // for X-Hub-Signature-256 HMAC
+  botJid: '27825651069',                         // phone-number-id or display number
+});
+
+// Mount webhook receiver (handles both GET verification and POST messages)
+app.use('/meta-webhook', adapter.router());
+```
+
+**CRITICAL:** Meta Cloud API requires raw request body for signature verification. The adapter handles this internally - do NOT use `express.json()` middleware before mounting the router.
+
 ### Custom Adapter
 
 Implement `WAAdapter` interface:
