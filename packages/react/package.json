@@ -1,10 +1,25 @@
 {
   "name": "wa-flashlogin-react",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "description": "React SDK for WhatsApp-native passwordless auth",
+  "description": "React hooks and components for WhatsApp passwordless authentication",
   "author": "Kobus Wentzel",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "whatsapp",
+    "passwordless",
+    "auth",
+    "hooks",
+    "qrcode"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kobie3717/wa-flashlogin.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/kobie3717/wa-flashlogin#readme",
+  "bugs": "https://github.com/kobie3717/wa-flashlogin/issues",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,8 +31,16 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",

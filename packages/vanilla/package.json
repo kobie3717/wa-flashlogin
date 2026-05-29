@@ -1,10 +1,25 @@
 {
   "name": "wa-flashlogin-vanilla",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "description": "Vanilla JS SDK for WhatsApp-native passwordless auth",
+  "description": "Vanilla JavaScript SDK for WhatsApp passwordless authentication with zero dependencies",
   "author": "Kobus Wentzel",
   "license": "MIT",
+  "keywords": [
+    "whatsapp",
+    "passwordless",
+    "vanilla",
+    "javascript",
+    "qrcode",
+    "auth"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kobie3717/wa-flashlogin.git",
+    "directory": "packages/vanilla"
+  },
+  "homepage": "https://github.com/kobie3717/wa-flashlogin#readme",
+  "bugs": "https://github.com/kobie3717/wa-flashlogin/issues",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,8 +33,16 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
