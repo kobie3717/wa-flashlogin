@@ -191,19 +191,134 @@ interface WAAdapter {
 - [baileys-antiban](https://github.com/kobie3717/baileys-antiban) - Anti-ban middleware (optional)
 - [wasp-protocol](https://github.com/kobie3717/wasp-protocol) - WA session management (optional)
 
+## Frontend SDKs
+
+### React
+
+```bash
+pnpm add wa-flashlogin-react
+```
+
+```tsx
+import { FlashLoginButton } from 'wa-flashlogin-react';
+
+function LoginPage() {
+  return (
+    <FlashLoginButton
+      apiBase="/auth"
+      phone="+27825651069"
+      onVerified={(payload) => router.push('/dashboard')}
+      onError={(err) => toast.error(err.message)}
+      label="Login with WhatsApp"
+      qrFallback
+    />
+  );
+}
+```
+
+Or use the hook:
+
+```tsx
+import { useFlashLogin } from 'wa-flashlogin-react';
+
+const { init, status, deeplink, error } = useFlashLogin({
+  apiBase: '/auth',
+  phone: '+27825651069',
+});
+```
+
+See [packages/react/README.md](./packages/react/README.md) for full API reference.
+
+### Vanilla JavaScript
+
+```bash
+pnpm add wa-flashlogin-vanilla
+```
+
+```js
+import { createFlashLogin } from 'wa-flashlogin-vanilla';
+
+const flash = createFlashLogin({
+  apiBase: '/auth',
+  phone: '+27825651069',
+});
+
+flash.on('verified', ({ phone }) => {
+  location.href = '/dashboard';
+});
+
+flash.mountButton(document.querySelector('#login-btn'), {
+  label: 'Login with WhatsApp',
+  qrFallback: true,
+});
+```
+
+Or use from CDN:
+
+```html
+<script src="https://unpkg.com/wa-flashlogin-vanilla"></script>
+<script>
+  const flash = WAFlashLogin.createFlashLogin({ ... });
+</script>
+```
+
+See [packages/vanilla/README.md](./packages/vanilla/README.md) for full API reference.
+
 ## Examples
 
-See [examples/basic-express](./examples/basic-express) for a working demo with MockAdapter.
+- [basic-express](./examples/basic-express) - Server with mock adapter
+- [react-vite](./examples/react-vite) - React 18 + Vite app
+- [vanilla-html](./examples/vanilla-html) - Plain HTML + JavaScript
+
+See [examples/README.md](./examples/README.md) for setup instructions.
+
+## Full Flow Example
+
+Server (Express):
+
+```typescript
+import express from 'express';
+import { createFlashLogin, BaileysAdapter } from 'wa-flashlogin-server';
+
+const flash = createFlashLogin({
+  adapter: new BaileysAdapter({ sock, botJid }),
+  secret: process.env.FLASHLOGIN_SECRET,
+});
+
+const app = express();
+app.use('/auth', flash.router());
+
+flash.on('verified', ({ sessionId, phone }) => {
+  // Create JWT, set session, etc.
+});
+
+app.listen(3000);
+```
+
+Client (React):
+
+```tsx
+import { FlashLoginButton } from 'wa-flashlogin-react';
+
+function LoginPage() {
+  const handleVerified = async (payload: { phone: string }) => {
+    const response = await fetch('/api/session', { method: 'POST' });
+    const { token } = await response.json();
+    localStorage.setItem('token', token);
+    router.push('/dashboard');
+  };
+
+  return (
+    <FlashLoginButton
+      apiBase="/auth"
+      phone={phoneInput}
+      onVerified={handleVerified}
+      qrFallback
+    />
+  );
+}
+```
 
 ## License
 
 MIT - Copyright (c) 2026 Kobus Wentzel
-
-## Day 2 Roadmap
-
-- React SDK (`wa-flashlogin-react`)
-- Vanilla JS SDK (`wa-flashlogin-js`)
-- Vue/Svelte/Solid adapters
-- QR code fallback (for desktop)
-- Retry/resend flows
-- Analytics hooks

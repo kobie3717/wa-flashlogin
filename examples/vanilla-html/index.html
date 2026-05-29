@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wa-flashlogin Vanilla JS Example</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>wa-flashlogin Vanilla JS Example</h1>
+    <p>Enter your phone number and click the button to authenticate via WhatsApp.</p>
+
+    <div class="form-group">
+      <label for="phone">Phone Number (E.164 format)</label>
+      <input
+        id="phone"
+        type="tel"
+        value="+27825651069"
+        placeholder="+27825651069"
+      />
+    </div>
+
+    <div id="login-container"></div>
+
+    <div id="verified-container" style="display: none;">
+      <p class="success">You are logged in as: <span id="verified-phone"></span></p>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="info">
+      <h3>How it works:</h3>
+      <ol>
+        <li>Click the button above</li>
+        <li>Open WhatsApp (or scan QR on desktop)</li>
+        <li>Send the pre-filled message</li>
+        <li>Get verified instantly</li>
+      </ol>
+
+      <h3>Testing with Mock Adapter:</h3>
+      <p>
+        The demo server at <code>localhost:3050</code> uses a mock adapter.
+        To simulate verification, send a POST to:
+      </p>
+      <pre id="simulate-example"></pre>
+    </div>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>

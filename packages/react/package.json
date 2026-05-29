@@ -1,0 +1,43 @@
+{
+  "name": "wa-flashlogin-react",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "React SDK for WhatsApp-native passwordless auth",
+  "author": "Kobus Wentzel",
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "optionalDependencies": {
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.3.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.3.0",
+    "happy-dom": "^14.7.1",
+    "react": "^18.3.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  }
+}

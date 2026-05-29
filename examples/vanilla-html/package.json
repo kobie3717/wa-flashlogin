@@ -1,0 +1,12 @@
+{
+  "name": "vanilla-html-example",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "serve . -p 5174 -l tcp://0.0.0.0:5174"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
+  }
+}
