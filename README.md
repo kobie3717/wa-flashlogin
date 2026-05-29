@@ -2,6 +2,16 @@
 
 WhatsApp-native passwordless authentication. Zero PIN typing.
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://flashlogin.whatshubb.co.za)
+
+## Try it Live
+
+**[https://flashlogin.whatshubb.co.za](https://flashlogin.whatshubb.co.za)**
+
+Interactive demo showing the full UX flow. Uses a mock WhatsApp adapter (no real messages sent) — click the orange "Simulate Verified" button to see what happens when a user taps Send in WhatsApp.
+
+For production deployment, replace `MockAdapter` with `BaileysAdapter` to send real WhatsApp messages.
+
 ## Why
 
 Traditional OTP flows force users to:
