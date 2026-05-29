@@ -1,0 +1,27 @@
+{
+  "name": "wa-flashlogin",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "WhatsApp-native passwordless authentication via reverse-OTP",
+  "author": "Kobus Wentzel",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "test": "pnpm -r test",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
